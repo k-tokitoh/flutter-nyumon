@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,14 +14,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      localizationsDelegates: [
-        GlobalWidgetsLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate, // android
-        GlobalCupertinoLocalizations.delegate, // ios
-      ],
-      supportedLocales: [
-        const Locale('ja', 'JP'),
-      ],
+      // localizationsDelegates: [
+      //   GlobalWidgetsLocalizations.delegate,
+      //   GlobalMaterialLocalizations.delegate, // android
+      //   GlobalCupertinoLocalizations.delegate, // ios
+      // ],
+      localizationsDelegates: L10n.localizationsDelegates,
+      // supportedLocales: [
+      //   const Locale('ja', 'JP'),
+      // ],
+      supportedLocales: L10n.supportedLocales,
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
@@ -81,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     Intl.defaultLocale = Localizations.localeOf(context).toString();
-
+    final l10n = L10n.of(context);
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -125,7 +128,8 @@ class _MyHomePageState extends State<MyHomePage> {
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             const TextField(),
-            Text(DateFormat.yMEd().format(DateTime.now()))
+            Text(DateFormat.yMEd().format(DateTime.now())),
+            Text(l10n.helloWorld),
           ],
         ),
       ),
