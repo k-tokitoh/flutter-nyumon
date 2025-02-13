@@ -132,7 +132,11 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(DateFormat.yMEd().format(DateTime.now())),
             Text(l10n.helloWorld),
             // Image.asset('assets/fry.png')  // flutter_genを利用しない場合はpathで指定する
-            Assets.fry.image()
+            Assets.fry.image(),
+            Assets.toast.svg(
+              width: 100,
+              height: 100,
+            )
           ],
         ),
       ),
