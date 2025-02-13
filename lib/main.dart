@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'gen/assets.gen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -130,6 +131,8 @@ class _MyHomePageState extends State<MyHomePage> {
             const TextField(),
             Text(DateFormat.yMEd().format(DateTime.now())),
             Text(l10n.helloWorld),
+            // Image.asset('assets/fry.png')  // flutter_genを利用しない場合はpathで指定する
+            Assets.fry.image()
           ],
         ),
       ),
