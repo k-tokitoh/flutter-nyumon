@@ -183,6 +183,19 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text(const String.fromEnvironment('apiEndpoint')),
             ThemedWidget(),
+            ElevatedButton(
+              child: const Text('次へ'),
+              onPressed: () {
+                final navigatorState = Navigator.of(context);
+                final route = MaterialPageRoute(
+                  builder: (context) => const SecondScreen(),
+                );
+                navigatorState.push(route);
+
+                // 以下と同じ
+                // Navigator.push(context, route);
+              },
+            ),
           ],
         ),
       ),
@@ -192,5 +205,25 @@ class _MyHomePageState extends State<MyHomePage> {
         child: const Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+}
+
+class SecondScreen extends StatelessWidget {
+  const SecondScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: const Text('Second Screen'),
+        ),
+        body: Center(
+            child: ElevatedButton(
+          child: const Text('戻る'),
+          onPressed: () {
+            final navigatorState = Navigator.of(context);
+            navigatorState.pop();
+          },
+        )));
   }
 }
