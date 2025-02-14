@@ -1,12 +1,34 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'gen/assets.gen.dart';
+import 'package:go_router/go_router.dart';
 
 void main() {
-  runApp(const MyApp());
+  // runApp(const MyApp());
+  runApp(
+    MaterialApp.router(
+      routerConfig: _router,
+    ),
+  );
 }
+
+final _router = GoRouter(routes: [
+  GoRoute(
+    path: '/',
+    builder: (context, state) => const FirstScreen(),
+    routes: [
+      GoRoute(
+        path: '/second',
+        builder: (context, state) => const SecondScreen(),
+        routes: [
+          GoRoute(
+              path: '/third', builder: (context, state) => const ThirdScreen()),
+        ],
+      )
+    ],
+  ),
+]);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -191,7 +213,8 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () async {
                 final navigatorState = Navigator.of(context);
                 final route = MaterialPageRoute(
-                  builder: (context) => SecondScreen(count: _counter),
+                  // builder: (context) => SecondScreen(count: _counter),
+                  builder: (context) => SecondScreen(),
                 );
                 final newCount = await navigatorState.push(route);
                 setState(() {
@@ -213,25 +236,92 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class SecondScreen extends StatelessWidget {
-  const SecondScreen({super.key, required this.count});
-
-  final int count;
+class FirstScreen extends StatelessWidget {
+  const FirstScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Second Screen'),
+      appBar: AppBar(
+        title: const Text('First Screen'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              child: const Text('first to second'),
+              onPressed: () {
+                GoRouter.of(context).go('/second');
+              },
+            ),
+            ElevatedButton(
+              child: const Text('first to third'),
+              onPressed: () {
+                GoRouter.of(context).go('/second/third');
+              },
+            ),
+          ],
         ),
-        body: Center(
-            child: ElevatedButton(
-          child: const Text('戻る'),
-          onPressed: () {
-            final navigatorState = Navigator.of(context);
-            // 戻ったところに100を与える。await push()の戻り値になる。
-            navigatorState.pop(count * 2);
-          },
-        )));
+      ),
+    );
+  }
+}
+
+class SecondScreen extends StatelessWidget {
+  const SecondScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Second Screen'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              child: const Text('second to third'),
+              onPressed: () {
+                GoRouter.of(context).go('/second/third');
+              },
+            ),
+            ElevatedButton(
+              child: const Text('back'),
+              onPressed: () {
+                GoRouter.of(context).pop();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ThirdScreen extends StatelessWidget {
+  const ThirdScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Third Screen'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              child: const Text('back'),
+              onPressed: () {
+                GoRouter.of(context).pop();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
