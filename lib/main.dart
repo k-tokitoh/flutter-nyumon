@@ -136,7 +136,8 @@ class _MyHomePageState extends State<MyHomePage> {
             Assets.toast.svg(
               width: 100,
               height: 100,
-            )
+            ),
+            Text(const String.fromEnvironment('apiEndpoint'))
           ],
         ),
       ),
