@@ -128,6 +128,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    _counter;
     Intl.defaultLocale = Localizations.localeOf(context).toString();
     final l10n = L10n.of(context);
     // This method is rerun every time setState is called, for instance as done
@@ -144,7 +145,8 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
+        // title: Text(widget.title),
+        title: Text('$_counter'),
       ),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -182,16 +184,19 @@ class _MyHomePageState extends State<MyHomePage> {
               height: 100,
             ),
             Text(const String.fromEnvironment('apiEndpoint')),
+            Text('$_counter'),
             ThemedWidget(),
             ElevatedButton(
               child: const Text('次へ'),
-              onPressed: () {
+              onPressed: () async {
                 final navigatorState = Navigator.of(context);
                 final route = MaterialPageRoute(
-                  builder: (context) => const SecondScreen(),
+                  builder: (context) => SecondScreen(count: _counter),
                 );
-                navigatorState.push(route);
-
+                final newCount = await navigatorState.push(route);
+                setState(() {
+                  _counter = newCount;
+                });
                 // 以下と同じ
                 // Navigator.push(context, route);
               },
@@ -209,7 +214,9 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class SecondScreen extends StatelessWidget {
-  const SecondScreen({super.key});
+  const SecondScreen({super.key, required this.count});
+
+  final int count;
 
   @override
   Widget build(BuildContext context) {
@@ -222,7 +229,8 @@ class SecondScreen extends StatelessWidget {
           child: const Text('戻る'),
           onPressed: () {
             final navigatorState = Navigator.of(context);
-            navigatorState.pop();
+            // 戻ったところに100を与える。await push()の戻り値になる。
+            navigatorState.pop(count * 2);
           },
         )));
   }
