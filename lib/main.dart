@@ -27,26 +27,70 @@ class MyApp extends StatelessWidget {
       supportedLocales: L10n.supportedLocales,
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+          // This is the theme of your application.
+          //
+          // TRY THIS: Try running your application with "flutter run". You'll see
+          // the application has a purple toolbar. Then, without quitting the app,
+          // try changing the seedColor in the colorScheme below to Colors.green
+          // and then invoke "hot reload" (save your changes or press the "hot
+          // reload" button in a Flutter-supported IDE, or press "r" if you used
+          // the command line to start the app).
+          //
+          // Notice that the counter didn't reset back to zero; the application
+          // state is not lost during the reload. To reset the state, use hot
+          // restart instead.
+          //
+          // This works for code too, not just values: Most code changes can be
+          // tested with just a hot reload.
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+          textTheme: const TextTheme(
+              bodyMedium:
+                  TextStyle(color: Colors.orange, fontWeight: FontWeight.w600)),
+          useMaterial3: true,
+          extensions: const [MyTheme(themeColor: Color(0xFF0000FF))]),
+      darkTheme: ThemeData(
+          colorSchemeSeed: Colors.deepPurple,
+          brightness: Brightness.dark,
+          extensions: const [MyTheme(themeColor: Color(0xFF0000FF))]),
+
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
+  }
+}
+
+class MyTheme extends ThemeExtension<MyTheme> {
+  const MyTheme({required this.themeColor});
+
+  final Color? themeColor;
+
+  @override
+  MyTheme copyWith({Color? themeColor}) {
+    return MyTheme(
+      themeColor: themeColor ?? this.themeColor,
+    );
+  }
+
+  @override
+  MyTheme lerp(MyTheme? other, double t) {
+    if (other is! MyTheme) {
+      return this;
+    }
+
+    return MyTheme(
+      themeColor: Color.lerp(themeColor, other.themeColor, t),
+    );
+  }
+}
+
+class ThemedWidget extends StatelessWidget {
+  const ThemedWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+    final myTheme = themeData.extension<MyTheme>()!;
+    final color = myTheme.themeColor;
+    return Container(width: 100, height: 100, color: color);
   }
 }
 
@@ -137,7 +181,8 @@ class _MyHomePageState extends State<MyHomePage> {
               width: 100,
               height: 100,
             ),
-            Text(const String.fromEnvironment('apiEndpoint'))
+            Text(const String.fromEnvironment('apiEndpoint')),
+            ThemedWidget(),
           ],
         ),
       ),
