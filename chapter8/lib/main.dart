@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:translator/input_form.dart';
 
 void main() {
   runApp(const MyApp());
@@ -20,6 +21,8 @@ class MyApp extends StatelessWidget {
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
+        // Cupertinoは利用しないが、Flutterの内部実装でCupertinoスタイルのダイアログやポップアップが使用される可能性があるなどの可能性があるため追加する
+        GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [
         Locale('ja', 'JP'),
@@ -34,6 +37,12 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('hiragana converter'),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+      ),
+      body: const InputForm(),
+    );
   }
 }
